@@ -83,12 +83,16 @@ citing the following paper:
     The expected data format is ../data/mp3d/<meshes/class-maps/room-dimension>, where the mp3d 
     folder contains the data from both MP3D and S3DIS.
 
-### Test Pre-trained Models
-1.  Download pre-trained models. See `output/README.md`.
+### Train and Evaluate Models
+You can download the pretrained models by running the script `scripts/download_pretrained_models.sh`. 
 
-2.  Test models using `scripts/script_test_pretrained_models.sh`.
+1. To train an inverse model, run the script `scripts/train_inverse_model.sh` (pretrained model included in the download script).
 
-### Train Your Own Models
+2. To train a vmsr policy, run the script `scripts/train_vmsr.sh` (pretrained model included in the download script). 
+
+3. To evaluate the pretrained model on exploration, run the script `scripts/evaluate_exploration.sh`.
+
+4. To evaluate the pretrained model on downstream RL for point goal and area goal, run the script `scripts/downstream_rl.sh`. This script contains 4 settings corresponding to area goal and point goal tasks, each for dense and sparse rewards.
 
 ### Credits
 This code was written by Ashish Kumar and Saurabh Gupta.
