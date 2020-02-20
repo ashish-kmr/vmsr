@@ -1,0 +1,17 @@
+gym==0.11.0
+numpy
+scikit-fmm
+scikit-image
+torch
+torchvision
+visdom
+pyyaml
+pyassimp
+pyopengl
+pyopengl-accelerate
+tensorboardX
+pytest
+baselines
+opencv-python
+pillow
+seaborn

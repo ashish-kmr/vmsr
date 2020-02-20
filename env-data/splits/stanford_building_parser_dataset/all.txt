@@ -1,0 +1,6 @@
+area1
+area5a
+area5b
+area6
+area3
+area4

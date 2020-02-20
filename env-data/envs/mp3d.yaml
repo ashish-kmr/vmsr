@@ -1,0 +1,7 @@
+padding: 10
+resolution: 5
+num_point_threshold: 0.01
+valid_min: -10
+valid_max: 200
+n_samples_per_face: 20
+make_y_into_z: False

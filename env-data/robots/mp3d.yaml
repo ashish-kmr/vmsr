@@ -1,0 +1,5 @@
+radius: 15
+base: 10
+height:  140
+sensor_height: 120
+camera_elevation_degree: -15
