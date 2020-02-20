@@ -79,7 +79,9 @@ citing the following paper:
     ```
 
 ### Requirements: data
-1.  Download the Stanford 3D Indoor Spaces Dataset (S3DIS Dataset). 
+1.  Download the Stanford 3D Indoor Spaces Dataset and Matterport 3D dataset. 
+    The expected data format is ../data/mp3d/<meshes/class-maps/room-dimension>, where the mp3d 
+    folder contains the data from both MP3D and S3DIS.
 
 ### Test Pre-trained Models
 1.  Download pre-trained models. See `output/README.md`.
@@ -87,11 +89,6 @@ citing the following paper:
 2.  Test models using `scripts/script_test_pretrained_models.sh`.
 
 ### Train Your Own Models
-
-### Contact
-For questions or issues open an issue on the tensorflow/models [issues
-tracker](https://github.com/tensorflow/models/issues). Please assign issues to
-@s-gupta.
 
 ### Credits
 This code was written by Ashish Kumar and Saurabh Gupta.

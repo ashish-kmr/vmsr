@@ -101,7 +101,7 @@ vis = visdom.Visdom(env = cmd_args.expt_args)
 
 st1 = 'bs1_N2en1_4_'
 st2 = '_16_18_1____mp3d_vp0______TN0_forward_demonstartion_____dilate1_multi1__'
-st3 = '.v0_ns40_sn5_frz0_bn1_dr64_one_fsynth_dnc2_gru_demon.dlw1e1_rlw1en1_ent0e0_lr1en4_adam2+train_train1'
+st3 = '.v0_ns40_sn5_frz0_bn1_dr64_one_fsynth_dnc2_gru_demon.dlw1e1_rlw1en1_ent0e0_lr1en4_adam2+train_traininv'
 
 args = generate_args([st1, st2, st3], [args_dict['step_size'], args_dict['nori']], [1,3], np.random.RandomState(0), max(1,num_workers))
 #env = args.env_multiplexer(args.task, 0, 1)
