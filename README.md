@@ -50,6 +50,7 @@ citing the following paper:
     replace `SwiftshaderRenderer` in `render/swiftshader_renderer.py` with
     bindings to your renderer. 
     ```Shell
+    apt-get install libxext-dev libx11-dev
     mkdir -p deps
     git clone --recursive https://github.com/google/swiftshader.git deps/swiftshader-src
     cd deps/swiftshader-src && git checkout 91da6b00584afd7dcaed66da88e2b617429b3950
@@ -67,7 +68,6 @@ citing the following paper:
     loading meshes. 
     ```Shell
     mkdir -p deps
-    apt-get install libxext-dev libx11-dev
     git clone https://github.com/assimp/assimp.git deps/assimp-src
     cd deps/assimp-src
     git checkout 2afeddd5cb63d14bc77b53740b38a54a97d94ee8
