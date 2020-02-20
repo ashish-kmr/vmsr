@@ -25,12 +25,162 @@ import tempfile
 import subprocess
 import select
 
-font                   = cv2.FONT_HERSHEY_PLAIN
+font                   = cv2.FONT_HERSHEY_SIMPLEX
 bottomLeftCornerOfText = (10,500)
 fontScale              = 1
 fontColor              = (255,255,255)
 lineType               = 2
 
+def extract_list_int(l):
+    if l is not None:
+        return [int(i) for i in l.split(',')]
+    else:
+        return None
+
+def extract_list_float(l):
+    if l is not None:
+        return [float(i) for i in l.split(',')]
+    else:
+        return None
+
+def concat_str(st, var, pos):
+    st_i = 0
+    var_i = 0
+    concat_str = []
+    for i in range(len(var) + len(st)):
+        if i in pos:
+            concat_str.append(str(var[var_i]))
+            var_i+=1
+        else:
+            concat_str.append(st[st_i])
+            st_i+=1
+    return ''.join(concat_str)
+
+
+def generate_args(st, var, pos, rng, cnt):
+    rand_init = []
+    for i in range(cnt):
+        rinit_i = []
+        for j in range(len(var)):
+            ridx = rng.randint(len(var[j]))
+            rinit_i.append(var[j][ridx])
+        rand_init.append(rinit_i)
+    ret_strs = []
+    for i in range(cnt):
+        ret_strs.append(concat_str(st, rand_init[i], pos))
+    return ret_strs
+
+
+
+def to_onehot(agpu, depth):
+    a = agpu.cpu().numpy()
+    oneh_a = np.zeros([len(a), depth])
+    oneh_a[range(len(a)), a] = 1
+    return oneh_a
+
+def compute_metrics(pred_act, gt_act):
+    act_cpu = gt_act.cpu()
+    correct_pred = (pred_act == gt_act).cpu().detach().numpy()
+    hist_i = []
+    dist_i = []
+    for hi in range(4):
+        idx_i = np.where(act_cpu == hi)
+        hist_i.append([hi,np.sum(correct_pred[idx_i])*1.0/len(idx_i[0])])
+        dist_i.append([hi, len(idx_i[0])])
+
+    return hist_i, dist_i, 100*np.mean(correct_pred)
+
+def concat_strs(a, b, c, d):
+    c_max = np.argmax(c.detach().cpu().numpy(), 1)
+    d_max = np.argmax(d.detach().cpu().numpy(), 1)
+    title_list = []
+    for n, tmp_i, tmp_j in (zip(range(a.reshape([-1]).size()[0]), a.reshape([-1]), b.reshape([-1]))):
+        if n%a.size()[1] == 0:
+            title_list.append('gt:'+str(int(tmp_i)) + '_p:' + str(int(tmp_j)) \
+                    + '_cp:' + str(int(c_max[int(n/a.size()[1])])) \
+                    + '_cgt:' + str(int(d_max[int(n/a.size()[1])])) )
+        else:
+            title_list.append('gt:'+str(int(tmp_i)) + '_p:' + str(int(tmp_j)))
+    return title_list
+
+def rollout(act_list):
+    init_env_state=[[980,200,0]]
+    rollout_states = []
+    states = [init_env_state]
+    lstep_size = 8
+    for j in range(len(act_list)):
+        act = act_list[j]
+        new_state = take_freespace_action(angle_value, lstep_size, states[j], [act], j)
+        states.append(new_state)
+    return states
+
+
+def get_latent_plots(z, acts, op_len, cl, ax):
+    cl_idx = np.where(z[:,cl] == 1)
+    acts_cl = acts[cl_idx[0]]
+    plot_clusters(acts_cl, ax, cl)
+        
+
+def concat_strs(a, b, c, d):
+    c_max = np.argmax(c.detach().cpu().numpy(), 1)
+    d_max = np.argmax(d.detach().cpu().numpy(), 1)
+    title_list = []
+    for n, tmp_i, tmp_j in (zip(range(a.reshape([-1]).size()[0]), a.reshape([-1]), b.reshape([-1]))):
+        if n%a.size()[1] == 0:
+            title_list.append('gt:'+str(int(tmp_i)) + '_p:' + str(int(tmp_j)) \
+                    + '_cp:' + str(int(c_max[int(n/a.size()[1])])) \
+                    + '_cgt:' + str(int(d_max[int(n/a.size()[1])])) )
+        else:
+            title_list.append('gt:'+str(int(tmp_i)) + '_p:' + str(int(tmp_j)))
+    return title_list
+
+def rollout(act_list):
+    init_env_state=[[980,200,0]]
+    rollout_states = []
+    states = [init_env_state]
+    lstep_size = 8
+    for j in range(len(act_list)):
+        act = act_list[j]
+        new_state = take_freespace_action(angle_value, lstep_size, states[j], [act], j)
+        states.append(new_state)
+    return states
+
+
+def get_latent_plots(z, acts, op_len, cl, ax):
+    cl_idx = np.where(z[:,cl] == 1)
+    acts_cl = acts[cl_idx[0]]
+    plot_clusters(acts_cl, ax, cl)
+        
+def plot_clusters(cluster, ax, cl):
+    local_rollout = []
+    if len(cluster) == 0 :
+        cluster = torch.tensor(np.array([[0]]))
+    for i in cluster:
+        states = rollout(i)
+        local_rollout.append(states)
+
+    full_view = 255 + np.zeros((1112, 524))
+    get_top_view_plot(None, np.array(local_rollout)[:,:,0,:], full_view, ax, cl)
+
+def get_top_view_plot(output_dir,st_ls, full_view, ax, cl):
+  line_width=[1,1,1,1,1]
+  color_lst=['g-','b-','r-','k-']
+  #import pdb; pdb.set_trace()
+  ax.imshow(1-full_view.astype(np.float32)/255., vmin=-0.5, vmax=1.5, cmap='Greys', origin='lower')
+
+  max_ = np.max(np.max(st_ls,axis=0),axis=0)[0:2][::-1]
+  min_ = np.min(np.max(st_ls,axis=0),axis=0)[0:2][::-1]
+
+  mid_ = (min_+max_)/2.
+  sz = np.maximum(1.1*np.max(max_-min_)/2., 100)
+  ax.axis('off')
+  ax.set_xlim([mid_[0]-sz, mid_[0]+sz])
+  ax.set_ylim([mid_[1]-sz, mid_[1]+sz])
+
+  for n, state_i in enumerate(st_ls):
+      ax.plot(st_ls[n,:,1], st_ls[n,:,0], color_lst[0], alpha=0.8, lw=line_width[0], ms=line_width[0])
+  ax.set_title('ns: ' + str(len(st_ls)) + 'z' + str(cl))
+  
 
 def freezeRSGrad(inpmodel, flag):
     for param in inpmodel.resnet_l5.parameters():

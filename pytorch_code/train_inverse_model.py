@@ -104,7 +104,6 @@ st2 = '_16_18_1____mp3d_vp0______TN0_forward_demonstartion_____dilate1_multi1__'
 st3 = '.v0_ns40_sn5_frz0_bn1_dr64_one_fsynth_dnc2_gru_demon.dlw1e1_rlw1en1_ent0e0_lr1en4_adam2+train_traininv'
 
 args = generate_args([st1, st2, st3], [args_dict['step_size'], args_dict['nori']], [1,3], np.random.RandomState(0), max(1,num_workers))
-#env = args.env_multiplexer(args.task, 0, 1)
 rng = np.random.RandomState(0)
 
 ## NN initialization
@@ -128,7 +127,6 @@ dataset = GenSSDataset_MT(env_args = args, transform = data_transforms['train'],
         dH = args_dict['dH'], dTheta = args_dict['dTheta'], nstarts = args_dict['nstarts'])
 
 
-#save_path = os.path.join('output/systest/'+'ss_inverse_models/', '{:04d}'.format(ss_steps) , '')
 if not os.path.exists(save_path):
     os.makedirs(save_path)
 
@@ -147,14 +145,6 @@ correct=0
 for iter in range(init_run_no):
     scheduler.step()
 
-'''
-win_name_acc = vis.scatter([[1,1]])
-win_name_dist = vis.scatter([[1,1]])
-win_name_sample = vis.images([np.random.random([3, 10, 10])])
-plt.plot([1, 23, 2, 4])
-win_name_error = vis.matplot(plt)
-win_name_total_acc = vis.matplot(plt)
-'''
 log_freq = 20
 expt_logger = Logger(['inv_loss', 'inv_acc', 'acc_hist', 'dist'], save_path, init_run_no, log_freq = log_freq)
 for epoch in range(EPOCH):
@@ -215,4 +205,3 @@ for epoch in range(EPOCH):
             torch.save(inv_model.state_dict(), save_path+'{0:03d}'.format(init_run_no + i)+'_inv_model.pth')
 
 torch.save(inv_model.state_dict(), save_path+'final_inv_model.pth')
-import pdb; pdb.set_trace()
