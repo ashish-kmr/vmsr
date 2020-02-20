@@ -21,8 +21,7 @@ citing the following paper:
 ### Contents
 1.  [Requirements: software](#requirements-software)
 2.  [Requirements: data](#requirements-data)
-3.  [Test Pre-trained Models](#test-pre-trained-models)
-4.  [Train your Own Models](#train-your-own-models)
+3.  [Train and Evaluate Models](#train-and-evaluate-models)
 
 
 ### Requirements: software
