@@ -94,5 +94,4 @@ You can download the pretrained models by running the script `scripts/download_p
 4. To evaluate the pretrained model on downstream RL for point goal and area goal, run the script `scripts/downstream_rl.sh`. This script contains 4 settings corresponding to area goal and point goal tasks, each for dense and sparse rewards.
 
 ### Credits
-This code was written by Ashish Kumar and Saurabh Gupta.
-
+This code was written by Ashish Kumar and Saurabh Gupta. The rl code was adapted from [PyTorch Implementations of Reinforcement Learning Algorithms](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail) Kostrikov, Ilya; GitHub. 2018
