@@ -79,8 +79,8 @@ citing the following paper:
 
 ### Requirements: data
 1.  Download the Stanford 3D Indoor Spaces Dataset and Matterport 3D dataset. 
-    The expected data format is ../data/mp3d/<meshes/class-maps/room-dimension>, where the mp3d 
-    folder contains the data from both MP3D and S3DIS.
+    The expected data format is ../data/mp3d/meshes; ../data/mp3d/class-maps; ../data/mp3d/room-dimension, where the mp3d 
+    folder contains the data from both MP3D and S3DIS. For S3DIS, you can follow the instructions at: https://github.com/tensorflow/models/tree/master/research/cognitive_mapping_and_planning/data
 
 ### Train and Evaluate Models
 You can download the pretrained models by running the script `scripts/download_pretrained_models.sh`. 
